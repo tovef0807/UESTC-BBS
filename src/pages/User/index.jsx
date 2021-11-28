@@ -2,20 +2,25 @@ import React from "react";
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { userLogin } from "@/api/user";
-import { forumlist } from "@/api/forum";
+import { useNavigate } from 'react-router-dom';
 import "./index.less";
 
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      userInfo: {},
+    };
   }
   onFinish = (values) => {
     userLogin(values).then((res) => {
-      //   console.log(res);
-    });
-    forumlist().then((res) => {
-      //   console.log(res);
+
+      const { secret, token, ...userInfo } = res;
+      localStorage.setItem("accessToken", token);
+      localStorage.setItem("accessSecret", secret);
+      this.setState({
+        userInfo,
+      });
     });
   };
   render() {

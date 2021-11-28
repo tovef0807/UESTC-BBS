@@ -1,13 +1,16 @@
 import axios from "axios";
 import qs from "qs";
 
-let fetch = axios.create({
+import { Modal } from "antd";
+
+const fetch = axios.create({
   baseURL: "api",
   timeout: 5000,
   headers: {
     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
   },
 });
+
 fetch.interceptors.request.use(
   (config) => {
     // 给请求加上请求头
@@ -23,6 +26,8 @@ fetch.interceptors.request.use(
         typeof config.data !== "string" &&
         config.headers["Content-Type"] !== "multipart/form-data"
       ) {
+        config.data.accessToken = "cca692bb7929a0a5130fda1762b78";
+        config.data.accessSecret = "f78e5243fc736fc2ebd5131b4b768";
         config.data = qs.stringify(config.data);
       }
     }
@@ -35,7 +40,14 @@ fetch.interceptors.request.use(
 
 fetch.interceptors.response.use(
   async (data) => {
-    return data.data;
+    if (data.data.errcode !== "") {
+      Modal.error({
+        title: "This is an error message~",
+        content: data.data.errcode,
+      });
+    } else {
+      return Promise.resolve(data.data);
+    }
   },
   (error) => {
     if (error.response) {

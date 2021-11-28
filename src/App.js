@@ -1,6 +1,5 @@
 import React from "react";
-
-import { MainLayouts } from "./layouts/MainLayouts";
+import MainLayouts from "./layouts/MainLayouts.jsx";
 
 export default function App() {
   return (
