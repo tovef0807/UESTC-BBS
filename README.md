@@ -2,6 +2,11 @@
 
 项目基于[Create React App](https://github.com/facebook/create-react-app)搭建，作为练习项目独立开发。
 
+## 准备环境
+
+node v16.13.0
+npm v8.1.0
+
 ## 如何运行
 
 在项目工程中，通过以下命令运行本项目
