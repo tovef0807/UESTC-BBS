@@ -4,6 +4,12 @@ import Board from "@/pages/Board/index.jsx";
 import Post from "@/pages/Post/index.jsx";
 const routes = [
   {
+    path: "/",
+    element: <Login />,
+    name: "登录",
+    auth: false,
+  },
+  {
     path: "/login",
     element: <Login />,
     name: "登录",

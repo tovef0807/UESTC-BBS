@@ -37,6 +37,32 @@
             .topic-content-context {
                 line-height: 24px;
             }
+
+            .topic-actions {
+                width: 100%;
+                display: flex;
+                margin-top: 36px;
+
+                .radius-btn {
+                    background-color: #003a8c;
+                    border-radius: 24px;
+                    padding: 4px 12px;
+                    margin-right: 12px;
+                    transition: all .3s;
+
+                    &:hover {
+                        cursor: pointer;
+                        opacity: 0.7;
+                        // transform: scale(1.2);
+                        box-shadow: #1a71c1 0px 0px 0px 5px;
+
+                        .anticon {
+                            transition: all .3s;
+                            transform: scale(1.4);
+                        }
+                    }
+                }
+            }
         }
 
         .topic-footer {
@@ -55,4 +81,16 @@
             }
         }
     }
+}
+
+.ant-back-top {
+    right: 100px;
+    bottom: 100px;
+}
+
+.reply-btns {
+    width: 100%;
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
 }
