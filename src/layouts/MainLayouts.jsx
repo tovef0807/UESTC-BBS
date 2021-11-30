@@ -22,7 +22,7 @@ export default function MainLayouts() {
       <Layout style={{ background: "#fff" }} id="main-layout">
         <BaseHeader />
         <Content
-          className="site-layout"
+          className="main-layout-content"
           style={{ padding: "0 50px", marginTop: 64 }}
         >
           <Breadcrumb style={{ margin: "16px 0" }}>
@@ -30,8 +30,9 @@ export default function MainLayouts() {
               <Link to="/home">Home</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>Board</Breadcrumb.Item>
+            <Breadcrumb.Item>Post</Breadcrumb.Item>
           </Breadcrumb>
-          <div className="content" style={{ padding: 24, minHeight: "800px" }}>
+          <div className="content">
             <Routes>{pages}</Routes>
           </div>
         </Content>

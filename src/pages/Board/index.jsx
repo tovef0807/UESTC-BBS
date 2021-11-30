@@ -5,23 +5,33 @@ import {
 import { Row, Col, Button, Space, Table } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { topiclist } from "@/api/forum";
+import { Link } from "react-router-dom";
 import "./index.less";
 
 const columns = [
     {
         title: 'TOPIC',
         dataIndex: 'title',
+        key: 'title',
+        render: (title, record) => {
+            return (
+                <Link to={`/post/${record.topic_id}`}>{title}</Link>
+            )
+        }
     },
     {
         title: 'USERS',
+        key: 'age',
         dataIndex: 'age',
     },
     {
         title: 'REPLIES',
+        key: 'replies',
         dataIndex: 'replies',
     },
     {
         title: 'VIES',
+        key: 'hits',
         dataIndex: 'hits',
     }
 ];

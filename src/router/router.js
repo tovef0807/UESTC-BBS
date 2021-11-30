@@ -1,7 +1,14 @@
 import Login from "@/pages/User/index.jsx";
 import Home from "@/pages/Home/index.jsx";
 import Board from "@/pages/Board/index.jsx";
+import Post from "@/pages/Post/index.jsx";
 const routes = [
+  {
+    path: "/",
+    element: <Login />,
+    name: "登录",
+    auth: false,
+  },
   {
     path: "/login",
     element: <Login />,
@@ -17,7 +24,13 @@ const routes = [
   {
     path: "/board/:boardId",
     element: <Board />,
-    name: "主页",
+    name: "板块",
+    auth: false,
+  },
+  {
+    path: "/post/:topicId",
+    element: <Post />,
+    name: "帖子",
     auth: false,
   },
 ];

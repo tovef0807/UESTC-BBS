@@ -3,7 +3,7 @@ import MainLayouts from "./layouts/MainLayouts.jsx";
 
 export default function App() {
   return (
-    <div>
+    <div style={{ height: "100%" }}>
       <MainLayouts />
     </div>
   );

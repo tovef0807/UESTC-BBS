@@ -1,0 +1,96 @@
+#post-container {
+    height: 100%;
+    width: 100%;
+
+    .topic {
+        width: 100%;
+        height: 100%;
+        background-color: #1890ff;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #fff;
+        padding: 36px;
+
+        .topic-title {
+            height: 80px;
+            font-size: 22px;
+            letter-spacing: 0px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .topic-content {
+            flex-grow: 1;
+
+            .topic-content-avatar {
+                height: 80px;
+                line-height: 80px;
+
+                .nickname {
+                    margin-left: 12px;
+                }
+            }
+
+            .topic-content-context {
+                line-height: 24px;
+            }
+
+            .topic-actions {
+                width: 100%;
+                display: flex;
+                margin-top: 36px;
+
+                .radius-btn {
+                    background-color: #003a8c;
+                    border-radius: 24px;
+                    padding: 4px 12px;
+                    margin-right: 12px;
+                    transition: all .3s;
+
+                    &:hover {
+                        cursor: pointer;
+                        opacity: 0.7;
+                        // transform: scale(1.2);
+                        box-shadow: #1a71c1 0px 0px 0px 5px;
+
+                        .anticon {
+                            transition: all .3s;
+                            transform: scale(1.4);
+                        }
+                    }
+                }
+            }
+        }
+
+        .topic-footer {
+            height: 120px;
+
+            .status {
+                font-size: 12px;
+
+                .status-title {
+                    color: #f0f0f0;
+                }
+            }
+
+            .users {
+                margin-top: 24px;
+            }
+        }
+    }
+}
+
+.ant-back-top {
+    right: 100px;
+    bottom: 100px;
+}
+
+.reply-btns {
+    width: 100%;
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+}
