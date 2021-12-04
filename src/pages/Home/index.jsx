@@ -13,7 +13,7 @@ export default function Board() {
             let boards = generateBoard(list);
             setBoards(boards);
         });
-    });
+    }, []);
     const generateBoard = (list) => {
         let boards = list.map((category) => {
             return (
@@ -23,7 +23,7 @@ export default function Board() {
                         {category.board_list.map((board) => {
                             return (
                                 <Col
-                                    span={6}
+                                    span={8}
                                     key={category.board_category_id + "-" + board.board_id}
                                 >
                                     <BoardCard board={board} />
