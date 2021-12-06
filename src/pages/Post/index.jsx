@@ -31,7 +31,9 @@ import {
 import { postlist, postNew } from "@/api/forum";
 import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
+import CButton from "@/components/Button";
 import "./index.less";
+import htmr from 'htmr';
 
 const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator', 'media', 'text-align']
 export default function Post() {
@@ -49,6 +51,9 @@ export default function Post() {
     const [replyVisible, setReplyVisible] = useState(false);
     const [notity, setNotity] = useState(false)
     const [replyText, setReplyText] = useState('')
+    useEffect(() => {
+        loadMoreData();
+    }, []);
     const loadMoreData = () => {
         if (loading) {
             return;
@@ -111,14 +116,21 @@ export default function Post() {
         console.log(text.toHTML());
         setReplyText(text)
     }
-    useEffect(() => {
-        loadMoreData();
-    }, []);
+    const formatContent = (content) => {
+        if (!content) return ''
 
+        const reg = /\[mobcent_phiz=.*?\]/g;
+        content = content.replace(reg, (match) => {
+            let img = match.replace('[mobcent_phiz=', '')
+            img = img.replace(']', '')
+            return `<img src=${img} alt='' style="vertical-align:bottom;margin: 0 2px"/>`
+        });
+        return htmr(`<div >${content}</div>`)
+    }
     return (
         <main id="post-container">
             <Row style={{ height: "100%" }}>
-                <Col span={8}>
+                <Col span={8} style={{ height: "100%" }}>
                     <div className="topic">
                         <div className="topic-title">{topic.title}</div>
                         <div className="topic-content">
@@ -130,31 +142,10 @@ export default function Post() {
                                 {topic.content[0].infor}
                             </div>
                             <div className="topic-actions">
-                                <Tooltip title="喜欢" placement="bottomLeft">
-                                    <div className="radius-btn">
-                                        <span style={{ marginRight: "8px" }}>
-                                            {topic.zanList.length}
-                                        </span>
-                                        <HeartFilled />
-                                    </div>
-                                </Tooltip>
-                                <Tooltip title="转发" placement="bottomLeft">
-                                    <div className="radius-btn">
-                                        <ShareAltOutlined />
-                                    </div>
-                                </Tooltip>
-                                <Tooltip title="收藏" placement="bottomLeft">
-                                    <div className="radius-btn">
-                                        {" "}
-                                        <TagsFilled />
-                                    </div>
-                                </Tooltip>
-                                <Tooltip title="回复帖子" placement="bottomLeft">
-                                    <div className="radius-btn" onClick={onClickReply}>
-                                        <RobotFilled style={{ marginRight: "8px" }} />
-                                        <span>回复</span>
-                                    </div>
-                                </Tooltip>
+                                <CButton tips="喜欢" icon={<HeartFilled />}>{topic.zanList.length}</CButton>
+                                <CButton tips="转发" icon={<ShareAltOutlined />}></CButton>
+                                <CButton tips="收藏" icon={<TagsFilled />}></CButton>
+                                <CButton tips="回复帖子" icon={<RobotFilled />} onClick={onClickReply}>回复</CButton>
                             </div>
                         </div>
                         <div className="topic-footer">
@@ -214,7 +205,7 @@ export default function Post() {
                                         actions={item.actions}
                                         author={item.reply_name}
                                         avatar={item.icon}
-                                        content={item.reply_content[0].infor}
+                                        content={formatContent(item.reply_content[0].infor)}
                                         datetime={
                                             <Tooltip
                                                 title={moment(+item.posts_date).format(

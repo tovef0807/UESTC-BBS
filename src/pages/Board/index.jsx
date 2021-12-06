@@ -5,6 +5,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { topiclist } from "@/api/forum";
 import { Link } from "react-router-dom";
 import "./index.less";
+import moment from "moment";
 
 const { Column, ColumnGroup } = Table;
 const colors = [
@@ -20,35 +21,38 @@ const colors = [
 ];
 const columns = [
     {
-        title: "TOPIC",
+        title: "帖子",
         dataIndex: "title",
         key: "title",
         render: (title, record) => {
-            return <Link to={`/post/${record.topic_id}`}>{title}</Link>;
+            return (
+                <div>
+                    {record.category && <Tag color="blue">{record.category}</Tag>}
+                    <Link to={`/post/${record.topic_id}`}>{title}</Link>
+                </div>
+            );
         },
     },
     {
-        title: "分类",
-        key: "category",
-        dataIndex: "category",
-        render: (category) => {
-            return <Tag color="blue">{category}</Tag>;
-        },
+        title: "作者",
+        key: "user_nick_name",
+        dataIndex: "user_nick_name",
     },
     {
-        title: "USERS",
-        key: "age",
-        dataIndex: "age",
-    },
-    {
-        title: "REPLIES",
+        title: "回复/查看",
         key: "replies",
         dataIndex: "replies",
+        render: (_, record) => {
+            return `${record.replies}/${record.hits}`;
+        },
     },
     {
-        title: "VIES",
-        key: "hits",
-        dataIndex: "hits",
+        title: "最近回复",
+        key: "last_reply_date",
+        dataIndex: "last_reply_date",
+        render: (last_reply_date) => {
+            return moment(+last_reply_date).format("YYYY-MM-DD HH:mm:ss");
+        },
     },
 ];
 
@@ -63,55 +67,64 @@ export default function Board() {
         fetchBoardList();
     }, []);
 
-    const fetchBoardList = (page = 1, pageSize = 20) => {
-        setLoading(true)
+    const fetchBoardList = (page = 1, pageSize = 20, sortby) => {
+        setLoading(true);
         topiclist({
             boardId,
             page,
             pageSize,
             topOrder: 1,
-        }).then((res) => {
-            setForumInfo(res.forumInfo);
-            const { list, page, total_num, classificationType_list } = res;
-            let topics = list.map((item) => {
-                item.key = item.topic_id;
-                let reg = /^\[(.*?)\]/g;
-                let category = item.title.match(reg);
-                if (category && category[0]) {
-                    item.category = category[0].replace(/\[|\]/g, '')
-                }
-                item.title = item.title.replace(reg, '');
-                return item;
+            sortby: sortby || "all",
+        })
+            .then((res) => {
+                setForumInfo(res.forumInfo);
+                const { list, page, total_num, classificationType_list } = res;
+                let topics = list.map((item) => {
+                    item.key = item.topic_id;
+                    let reg = /^\[(.*?)\]/g;
+                    let category = item.title.match(reg);
+                    if (category && category[0]) {
+                        item.category = category[0].replace(reg, "");
+                    }
+                    item.title = item.title.replace(reg, "");
+                    return item;
+                });
+                setTopics(topics);
+                setPagination({
+                    current: page,
+                    total: total_num,
+                    pageSize,
+                });
+                const categorys = classificationType_list.map((c) => {
+                    return (
+                        <Tag
+                            className="board-tag"
+                            color={colors[Math.floor(Math.random() * 9)]}
+                            key={c.classificationType_id}
+                            onClick={onClickTag(c.classificationType_id)}
+                        >
+                            {c.classificationType_name}
+                        </Tag>
+                    );
+                });
+                setCategorys(categorys);
+            })
+            .finally(() => {
+                setLoading(false);
             });
-            setTopics(topics);
-            setPagination({
-                current: page,
-                total: total_num,
-                pageSize,
-            });
-            const categorys = classificationType_list.map((c) => {
-                return (
-                    <Tag
-                        className="board-tag"
-                        color={colors[Math.floor(Math.random() * 9)]}
-                        key={c.classificationType_id}
-                        onClick={onClickTag(c.classificationType_id)}
-                    >
-                        {c.classificationType_name}
-                    </Tag>
-                );
-            });
-            setCategorys(categorys);
-        }).finally(() => {
-            setLoading(false)
-        });
-    }
+    };
 
     const onClickTag = (id) => { };
     const handleTableChange = (pagination) => {
         const { current, pageSize } = pagination;
         fetchBoardList(current, pageSize);
-    }
+    };
+    const onFetchLatest = () => {
+        fetchBoardList(pagination.page, pagination.pageSize, "new");
+    };
+    const onFetchTop = () => {
+        fetchBoardList(pagination.page, pagination.pageSize, "marrow");
+    };
     return (
         <main id="board-container">
             <div className="board-header">
@@ -120,8 +133,12 @@ export default function Board() {
             <Row>
                 <Col span={4}>
                     <Space>
-                        <Button type="text">LATEST</Button>
-                        <Button type="text">POPULAR</Button>
+                        <Button type="text" onClick={onFetchLatest}>
+                            LATEST
+                        </Button>
+                        <Button type="text" onClick={onFetchTop}>
+                            POPULAR
+                        </Button>
                     </Space>
                 </Col>
                 <Col span={4} offset={16} style={{ textAlign: "right" }}>
@@ -133,7 +150,7 @@ export default function Board() {
             {categorys}
             <Table
                 columns={columns}
-                rowKey={record => record.topic_id}
+                rowKey={(record) => record.topic_id}
                 dataSource={topics}
                 pagination={pagination}
                 size="large"
