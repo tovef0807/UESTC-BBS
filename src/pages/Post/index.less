@@ -5,13 +5,15 @@
     .topic {
         width: 100%;
         height: 100%;
-        background-color: #1890ff;
+        background-color: ;
+        background-image: linear-gradient(#1890ff, #0050b3);
         border-radius: 12px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         color: #fff;
-        padding: 36px;
+        padding: 12px;
+        overflow: auto;
 
         .topic-title {
             height: 80px;
@@ -24,6 +26,8 @@
 
         .topic-content {
             flex-grow: 1;
+            white-space: pre-line;
+            margin-bottom: 24px;
 
             .topic-content-avatar {
                 height: 80px;
@@ -43,25 +47,7 @@
                 display: flex;
                 margin-top: 36px;
 
-                .radius-btn {
-                    background-color: #003a8c;
-                    border-radius: 24px;
-                    padding: 4px 12px;
-                    margin-right: 12px;
-                    transition: all .3s;
 
-                    &:hover {
-                        cursor: pointer;
-                        opacity: 0.7;
-                        // transform: scale(1.2);
-                        box-shadow: #1a71c1 0px 0px 0px 5px;
-
-                        .anticon {
-                            transition: all .3s;
-                            transform: scale(1.4);
-                        }
-                    }
-                }
             }
         }
 
@@ -93,4 +79,12 @@
     margin-top: 24px;
     display: flex;
     justify-content: flex-end;
+}
+
+.ant-comment {
+    transition: all .3s;
+
+    &:hover {
+        background-color: #f5f5f5;
+    }
 }
